@@ -1,3 +1,7 @@
+<!-- [![npm package](https://nodei.co/npm/server-store.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/server-store/) -->
+
+[![Build status](https://img.shields.io/travis/abadri/server-store/master.svg?style=flat-square)](https://travis-ci.org/abadri/server-store)
+
 # server-store
 Local storage for nodejs which use filesystem to store data in JSON file.
 
