@@ -12,7 +12,7 @@ const mkdirp = require('mkdirp');
  * Data by default will be cached only for 1 hour and max size is 1 mb
  * Primary usage: To cache taxonomy calls which are not user dependent
  *
- * @param {String} appName optional - name space for local store, default: suppliercenter
+ * @param {String} appName required - name space for local store
  * @param {String} store required - name of the local store
  * @param {String} path optional - Local store path on node server, default: /tmp/store
  * @param {Number} expiryTime optional - cache expiry time in ms, default: 1 hr
@@ -20,18 +20,18 @@ const mkdirp = require('mkdirp');
  *
  * @example
  *  const Store = require('index');
- *  const taxonomyStore = new Store('taxonomy');
+ *  const zipCodes = new Store('testApp', 'zipCodes');
  *
  * Setting data
- * taxonomyStore.setItem('categories', [{xys:123},{xyz:4333}]);
+ * zipCodes.setItem('codes', [{xys:123},{xyz:4333}]);
  * @returns true
  *
  * Getting sored data
- * taxonomyStore.getItem('categories');
+ * zipCodes.getItem('codes');
  * @returns [{xys:123},{xyz:4333}]
  *
  * Clearing cache
- * taxonomyStore.clearCache(); //Clears local store content
+ * zipCodes.clearCache(); //Clears local store content
  */
 
 
