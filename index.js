@@ -19,15 +19,15 @@ const mkdirp = require('mkdirp');
  * @param {Number} maxFileSize optional - Max size of data to be stored, default: 1 mb
  *
  * @example
- *  const Store = require('index');
+ *  const Store = require('server-store');
  *  const zipCodes = new Store('testApp', 'zipCodes');
  *
  * Setting data
- * zipCodes.setItem('codes', [{xys:123},{xyz:4333}]);
+ * zipCodes.setItem('ca-codes', [{xys:123},{xyz:4333}]);
  * @returns true
  *
  * Getting sored data
- * zipCodes.getItem('codes');
+ * zipCodes.getItem('ca-codes');
  * @returns [{xys:123},{xyz:4333}]
  *
  * Clearing cache
