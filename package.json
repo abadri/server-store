@@ -1,0 +1,39 @@
+{
+    "name": "server-store",
+    "version": "0.0.1",
+    "description": "Local storage for node js which uses file system to store small sets of data",
+    "main": "index.js",
+    "scripts": {
+        "test": "grunt test"
+    },
+    "engines": {
+        "node": ">= 4.2.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/abadri/server-store.git"
+    },
+    "keywords": [
+        "Local",
+        "storage",
+        "for",
+        "server"
+    ],
+    "author": "Abilash Badri",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/abadri/server-store/issues"
+    },
+    "homepage": "https://github.com/abadri/server-store#readme",
+    "dependencies": {
+        "fs": "0.0.2",
+        "mkdirp": "^0.5.1",
+        "path": "^0.12.7"
+    },
+    "devDependencies": {
+        "chai": "^3.5.0",
+        "grunt": "^1.0.1",
+        "grunt-mocha-test": "^0.12.7",
+        "mocha": "^2.4.5"
+    }
+}
