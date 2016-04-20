@@ -15,7 +15,7 @@ const mkdirp = require('mkdirp');
  * @param {String} appName optional - name space for local store, default: suppliercenter
  * @param {String} store required - name of the local store
  * @param {String} path optional - Local store path on node server, default: /tmp/store
- * @param {Number} expires optional - cache expiry time in ms, default: 1 hr
+ * @param {Number} expiryTime optional - cache expiry time in ms, default: 1 hr
  * @param {Number} maxFileSize optional - Max size of data to be stored, default: 1 mb
  *
  * @example
@@ -31,17 +31,25 @@ const mkdirp = require('mkdirp');
  * @returns [{xys:123},{xyz:4333}]
  *
  * Clearing cache
- * taxonomyStore.createFile(); //Clears local store content
+ * taxonomyStore.clearCache(); //Clears local store content
  */
 
+
+const _storeName = new WeakMap();
+const _nameSpace = new WeakMap();
+const _storeLocation = new WeakMap();
+const _expires = new WeakMap();
+const _maxFileSize = new WeakMap();
+const _fileName = new WeakMap();
+
 class ServerStore {
-    constructor(appName, store, storepath, expires, maxFileSize) {
+    constructor(appName, store, storepath, expiryTime, maxFileSize) {
 
         if (typeof appName !== 'string' || typeof store !== 'string') {
             return new Error('Invalid argument need to be a string');
         }
 
-        if (expires && typeof expires !== 'number') {
+        if (expiryTime && typeof expiryTime !== 'number') {
             return new Error(
                 'Invalid argument expiry time need to be number');
         }
@@ -52,25 +60,25 @@ class ServerStore {
             );
         }
 
-        this._storeName = store;
-        this._soreLocation = storepath || '/tmp/store';
-        this._nameSpace = appName;
-
+        _nameSpace.set(this, appName);
+        _storeName.set(this, store);
+        _storeLocation.set(this, (storepath || '/tmp/store'));
 
         // Default is 1 hr
-        this._expires = expires || 3.6e+6;
+        _expires.set(this, (expiryTime || 3.6e+6));
+        // Maxfile size 1 mb
+        _maxFileSize.set(this, (maxFileSize || 1000000));
 
-        // MaXfile size 1 mb
-        this._maxFileSize = maxFileSize || 1000000;
+        _fileName.set(this, path.join(_storeLocation.get(this), _nameSpace.get(
+                this) +
+            '-' +
+            _storeName.get(this) + '.json'));
 
-        this.fileName = path.join(this._soreLocation, this._nameSpace + '-' +
-            this._storeName + '.json');
-
-        mkdirp.sync(this._soreLocation);
+        mkdirp.sync(_storeLocation.get(this));
 
         try {
-            const file = fs.statSync(this.fileName);
-            if (file.size >= this._maxFileSize) {
+            const file = fs.statSync(_fileName.get(this));
+            if (file.size >= _maxFileSize.get(this)) {
                 this._createFile();
             }
         } catch (err) {
@@ -90,7 +98,7 @@ class ServerStore {
     }
 
     _createFile() {
-        fs.writeFileSync(this.fileName, JSON.stringify(this._getBlankFile()));
+        fs.writeFileSync(_fileName.get(this), JSON.stringify(this._getBlankFile()));
     }
 
     _getBlankFile() {
@@ -101,9 +109,9 @@ class ServerStore {
 
     _readFileSync() {
         try {
-            let file = JSON.parse(fs.readFileSync(this.fileName));
+            let file = JSON.parse(fs.readFileSync(_fileName.get(this)));
             // Clear the stale data
-            if ((Date.now() - file._timeStamp) > this._expires) {
+            if ((Date.now() - file._timeStamp) > _expires.get(this)) {
                 file = this._getBlankFile();
             }
             return file;
@@ -115,7 +123,7 @@ class ServerStore {
     _writeFileSync(data) {
 
         try {
-            fs.writeFileSync(this.fileName, JSON.stringify(data));
+            fs.writeFileSync(_fileName.get(this), JSON.stringify(data));
             return this._checkFileSize();
         } catch (err) {
             return err;
@@ -123,8 +131,8 @@ class ServerStore {
     }
 
     _checkFileSize() {
-        const file = fs.statSync(this.fileName);
-        return file.size <= this._maxFileSize;
+        const file = fs.statSync(_fileName.get(this));
+        return file.size <= _maxFileSize.get(this);
     }
 
     getItem(key) {
@@ -136,7 +144,7 @@ class ServerStore {
         let data = this._readFileSync();
 
         // Clear the stale data
-        if ((Date.now() - data._timeStamp) > this._expires) {
+        if ((Date.now() - data._timeStamp) > _expires.get(this)) {
             data = this._getBlankFile();
         }
         data[key] = value;
@@ -147,5 +155,4 @@ class ServerStore {
         this._createFile();
     }
 }
-
 module.exports = ServerStore;
