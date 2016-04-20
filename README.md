@@ -28,7 +28,7 @@ We can use local DB to address this but for the application which is stateless o
 ```js
 npm install server-store --save
 const Store = require('server-store');
-const testStore = new Store('appName','storeName','/tmp/storePath', expiryTime, maxStoreSize);
+const testStore = new Store('appName','storeName');
 ```
 ## To store data to local store
 ```js

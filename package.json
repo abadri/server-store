@@ -1,6 +1,6 @@
 {
     "name": "server-store",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Local storage for node js which uses file system to store small sets of data",
     "main": "index.js",
     "scripts": {
