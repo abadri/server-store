@@ -14,7 +14,7 @@ const mkdirp = require('mkdirp');
  *
  * @param {String} appName required - name space for local store
  * @param {String} store required - name of the local store
- * @param {String} path optional - Local store path on node server, default: /tmp/store
+ * @param {String} storepath optional - Local store path on node server, default: /tmp/store
  * @param {Number} expiryTime optional - cache expiry time in ms, default: 1 hr
  * @param {Number} maxFileSize optional - Max size of data to be stored, default: 1 mb
  *
